@@ -16,9 +16,9 @@ def md():
 
 
 def test_currency(md):
-    html = md.convert("££60000£IDR£USD££")
+    html = md.convert("a ££60000£IDR£USD££ b")
     assert html == surround(
-        '<span class="currency">IDR 60,000 <span><span>USD 4.20</span></span></span>'
+        'a <span class="currency">IDR 60,000 <span><span>USD 4.20</span></span></span> b'
     )
 
 

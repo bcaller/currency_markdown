@@ -7,7 +7,7 @@ from markdown import Extension
 from markdown.inlinepatterns import InlineProcessor
 from markdown.util import etree
 
-RE = r"££([0-9]+)£([A-Z]{3})£([A-Z]+)££"
+RE = r"^(?:.*?)££([0-9]+)£([A-Z]{3})£([A-Z]+)££(?:.*)$"
 
 
 def nice_money(amount, currency):
@@ -66,7 +66,7 @@ class CurrencyPattern(InlineProcessor):
             amnt = calculate(amount, currency_from, currency, self._rates)
             etree.SubElement(sub, "span").text = nice_money(amnt, currency)
             first = False
-        return el, m.start(0), m.end(0)
+        return el, m.start(2) - 2, m.end(4) + 2
 
 
 class CurrencyExtension(Extension):

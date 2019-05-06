@@ -46,7 +46,7 @@ setup(
         'pytest',
     ],
     cmdclass={'test': PyTest},
-    install_requires=['markdown>=2.5', 'requests'],
+    install_requires=['markdown>=3', 'requests'],
     extras_require={
         'develop': [
             'pypandoc'
