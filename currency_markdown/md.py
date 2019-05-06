@@ -85,7 +85,7 @@ class CurrencyExtension(Extension):
 
     def extendMarkdown(self, md):
         pattern = CurrencyPattern(md, **self.getConfigs())
-        md.inlinePatterns.register(pattern, "<not_strong", 80)
+        md.inlinePatterns.register(pattern, "currency", 90)
 
 
 def makeExtension(*args, **kwargs):
