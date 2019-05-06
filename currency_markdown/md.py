@@ -9,12 +9,45 @@ from markdown.util import etree
 
 RE = r"^(?:.*?)££([0-9]+)£([A-Z]{3})£([A-Z]+)££(?:.*)$"
 
+SYMBOLS = {
+    "AUD": "AU${amount}",
+    "BRL": "R${amount}",
+    "CAD": "CA${amount}",
+    "CHF": "Fr. {amount}",
+    "CNY": "CN¥{amount}",
+    "CZK": "{amount} Kč",
+    "EUR": "€{amount}",
+    "GBP": "£{amount}",
+    "HKD": "HK${amount}",
+    "HUF": "{amount} Ft",
+    "IDR": "Rp {amount}",
+    "ILS": "₪{amount}",
+    "INR": "₹{amount}",
+    "JPY": "JP¥{amount}",
+    "KRW": "₩{amount}",
+    "MXN": "MX${amount}",
+    "NZD": "NZ${amount}",
+    "PEN": "S/{amount}",
+    "PHP": "₱{amount}",
+    "PLN": "{amount}zł",
+    "RON": "{amount} lei",
+    "SGD": "SG${amount}",
+    "THB": "฿{amount}",
+    "TRY": "₺{amount}",
+    "TWD": "NT${amount}",
+    "USD": "US${amount}",
+}
 
-def nice_money(amount, currency):
-    if amount >= 1000:
-        return "{} {:,.0f}".format(currency, amount)
+
+def nice_money(amount, currency, fancy=False):
+    if amount >= 1000 or (fancy and amount % 1 < 0.01):
+        number_str = "{:,.0f}".format(amount)
     else:
-        return "{} {:,.2f}".format(currency, amount)
+        number_str = "{:,.2f}".format(amount)
+    symbol_format = "{currency} {amount}"
+    if fancy:
+        symbol_format = SYMBOLS.get(currency, symbol_format)
+    return symbol_format.format(currency=currency, amount=number_str)
 
 
 def calculate(amount, currency_from, currency_to, rates):
@@ -57,15 +90,13 @@ class CurrencyPattern(InlineProcessor):
         to_currencies = [to_currency_str[i:i+3] for i in range(0, len(to_currency_str), 3)]
         el = etree.Element("span")
         el.set("class", "currency")
-        el.text = nice_money(amount, currency_from) + " "
+        el.text = nice_money(amount, currency_from, fancy=True) + " "
         sub = etree.SubElement(el, "span")
-        first = True
+        etree.SubElement(sub, "span").text = nice_money(amount, currency_from)
         for currency in to_currencies:
-            if not first:
-                etree.SubElement(sub, "br")
+            etree.SubElement(sub, "br")
             amnt = calculate(amount, currency_from, currency, self._rates)
             etree.SubElement(sub, "span").text = nice_money(amnt, currency)
-            first = False
         return el, m.start(2) - 2, m.end(4) + 2
 
 
