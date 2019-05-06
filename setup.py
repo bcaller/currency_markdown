@@ -32,7 +32,7 @@ def readme():
 
 setup(
     name='currency_markdown',
-    version='0.0.4',
+    version='0.0.5',
     description='...',
     long_description=readme(),
     url='https://github.com/bcaller/currency_markdown',

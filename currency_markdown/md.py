@@ -7,7 +7,7 @@ from markdown import Extension
 from markdown.inlinepatterns import InlineProcessor
 from markdown.util import etree
 
-RE = r"^(?:.*?)££([0-9]+)£([A-Z]{3})£([A-Z]+)££(?:.*)$"
+RE = r"^(?:.*?)££([0-9.]+)£([A-Z]{3})£([A-Z]+)££(?:.*)$"
 
 SYMBOLS = {
     "AUD": "AU${amount}",

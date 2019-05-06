@@ -44,7 +44,7 @@ def test_2():
         "DEF": 1,
     })
     mkd = markdown.Markdown(extensions=[ext])
-    html = mkd.convert("££12345£ABC£DEFDEF££")
+    html = mkd.convert("££12345.0£ABC£DEFDEF££")
     assert html.replace("\n", "") == surround(
         '<span class="currency">ABC 12,345 <span><span>ABC 12,345</span><br />'
         '<span>DEF 12,345</span><br />'
